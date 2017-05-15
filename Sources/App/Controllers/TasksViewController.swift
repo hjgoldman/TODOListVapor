@@ -42,9 +42,24 @@ final class TasksViewController {
         
         drop.get("tasks","all",handler :getAll)
         drop.post("tasks","create",handler :create)
+        drop.post("tasks","delete",handler :delete)
         
     }
     
+    //DELETE from db
+    func delete(_ req :Request) throws -> ResponseRepresentable {
+        
+        guard let taskId = req.data["taskId"]?.int else {
+            throw Abort.badRequest
+        }
+        
+        try drop.database?.driver.raw("DELETE FROM Tasks WHERE taskId = ?",[taskId])
+        
+        return try JSON(node:["success":true])
+        
+    }
+    
+    //POST to db
     func create(_ req :Request) throws -> ResponseRepresentable {
         
         guard let title = req.data["title"]?.string else {
@@ -57,6 +72,7 @@ final class TasksViewController {
         
     }
     
+    // GET from db
     func getAll(_req :Request) throws -> ResponseRepresentable {
         
         let result = try drop.database?.driver.raw("SELECT taskId, title from Tasks;")
