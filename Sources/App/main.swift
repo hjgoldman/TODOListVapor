@@ -1,13 +1,9 @@
 import Vapor
+import HTTP
+import VaporSQLite
 
 let drop = Droplet()
 
-drop.get { req in
-    return try drop.view.make("welcome", [
-    	"message": drop.localization[req.lang, "welcome", "title"]
-    ])
-}
-
-drop.resource("posts", PostController())
+try drop.addProvider(VaporSQLite.Provider.self)
 
 drop.run()
