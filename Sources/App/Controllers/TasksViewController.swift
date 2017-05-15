@@ -41,6 +41,19 @@ final class TasksViewController {
     func addRoutes (drop :Droplet) {
         
         drop.get("tasks","all",handler :getAll)
+        drop.post("tasks","create",handler :create)
+        
+    }
+    
+    func create(_ req :Request) throws -> ResponseRepresentable {
+        
+        guard let title = req.data["title"]?.string else {
+            throw Abort.badRequest
+        }
+        
+        try drop.database?.driver.raw("INSERT INTO Tasks(title) Values(?)",[title])
+        
+        return try JSON(node :["success":true])
         
     }
     
