@@ -11,7 +11,7 @@
     <li>
         #(task.title)
         <input type="submit" value="Delete" />
-        <input type="hidden" value="#(task.taskId)" name="taskId" />
+        <input type="hidden" value="#(task.id)" name="id" />
     </li>
 </form>
 

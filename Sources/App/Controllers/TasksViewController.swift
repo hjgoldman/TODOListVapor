@@ -13,24 +13,25 @@ import VaporSQLite
 
 class Task : NodeRepresentable {
     
-    var taskId :Int!
+    var id :Int!
     var title :String!
     
     func makeNode(context: Context) throws -> Node {
-        return try Node(node :["taskId":self.taskId,"title":self.title])
+        return try Node(node :["id":self.id,"title":self.title])
     }
+    
 }
 
 extension Task {
     convenience init?(node :Node) {
         self.init()
         
-        guard let taskId  = node["taskId"]?.int,
+        guard let id  = node["id"]?.int,
             let title = node["title"]?.string else {
                 return nil
         }
         
-        self.taskId = taskId
+        self.id = id
         self.title = title
     }
 }
@@ -49,11 +50,11 @@ final class TasksViewController {
     //DELETE from db
     func delete(_ req :Request) throws -> ResponseRepresentable {
         
-        guard let taskId = req.data["taskId"]?.int else {
+        guard let id = req.data["id"]?.int else {
             throw Abort.badRequest
         }
         
-        try drop.database?.driver.raw("DELETE FROM Tasks WHERE taskId = ?",[taskId])
+        try drop.database?.driver.raw("DELETE FROM Tasks WHERE id = $1",[id])
         
         return try JSON(node:["success":true])
         
@@ -66,7 +67,7 @@ final class TasksViewController {
             throw Abort.badRequest
         }
         
-        try drop.database?.driver.raw("INSERT INTO Tasks(title) Values(?)",[title])
+        try drop.database?.driver.raw("INSERT INTO tasks(title) Values($1)",[title])
         
         return try JSON(node :["success":true])
         
@@ -75,7 +76,7 @@ final class TasksViewController {
     // GET from db
     func getAll(_req :Request) throws -> ResponseRepresentable {
         
-        let result = try drop.database?.driver.raw("SELECT taskId, title from Tasks;")
+        let result = try drop.database?.driver.raw("SELECT id, title from tasks;")
         
         guard let nodes = result?.nodeArray else {
             return try JSON(node :[])
