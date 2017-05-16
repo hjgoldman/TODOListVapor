@@ -1,0 +1,34 @@
+
+#extend("base")
+
+#export("body") {
+
+    <h1>Current Tasks</h1>
+
+#loop(tasks,"task") {
+
+<form action="/tasks/remove" method="POST">
+    <li>
+        #(task.title)
+        <input type="submit" value="Delete" />
+        <input type="hidden" value="#(task.taskId)" name="taskId" />
+    </li>
+</form>
+
+
+}
+
+<!-- Adding a New Task -->
+
+<form action="/tasks" method="POST">
+    New Task:  <input type="text" name="title" />
+    <input type="submit" value="Submit" />
+<form>
+
+}
+
+
+
+
+
+

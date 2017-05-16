@@ -40,8 +40,8 @@ final class TasksViewController {
     
     func addRoutes (drop :Droplet) {
         
-        drop.get("tasks","all",handler :getAll)
-        drop.post("tasks","create",handler :create)
+        drop.get("tasks","get",handler :getAll)
+        drop.post("tasks","post",handler :create)
         drop.post("tasks","delete",handler :delete)
         
     }
