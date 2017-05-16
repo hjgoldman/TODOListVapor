@@ -1,6 +1,5 @@
 import Vapor
 import HTTP
-//import VaporSQLite
 import PostgreSQL
 import VaporPostgreSQL
 
